@@ -102,7 +102,7 @@ export default {
     background-color: #333;
   }
 
-  @media only screen and (max-width: 440px) {
+  @media only screen and (max-width: 446px) {
     .requires-cell-resize .cell {
       height: 22px;
       width: 22px;

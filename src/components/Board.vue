@@ -211,7 +211,7 @@ export default {
     width: 64px;
   }
 
-  @media only screen and (max-width: 440px) {
+  @media only screen and (max-width: 446px) {
     .hint-header .hint-header-spacer {
       width: 64px !important;
     }
