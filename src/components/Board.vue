@@ -1,8 +1,24 @@
 <template>
-  <div class="board-wrapper animated" :class="{'fadeLeft': isCompleted}">
+  <section class="board-wrapper animated" :class="{'fadeLeft': isCompleted}">
 
-    <copy-button v-if="editMode" title="Board Code:" :value="cellsToBinaryString" class="mt-3">
-    </copy-button>
+    <b-container v-if="editMode">
+      <b-row>
+        <b-col>
+          <copy-button title="Board Code:" :value="cellsToBinaryString" class="mt-3">
+          </copy-button>
+        </b-col>
+      </b-row>
+
+      <b-form class="row mt-3">
+        <b-form-group :label="columnsTitle" class="col">
+          <input type="range" min="3" max="10" v-model="columns" class="form-control-range" id="columns-range" />
+        </b-form-group>
+
+        <b-form-group :label="rowsTitle" class="col">
+          <input type="range" min="3" max="10" v-model="rows" class="form-control-range" id="rows-range" />
+        </b-form-group>
+      </b-form>
+    </b-container>
 
     <table class="board" :class="{'requires-cell-resize': requiresCellResize}">
       <tr class="hint-header row">
@@ -58,13 +74,13 @@
         </b-alert>
       </transition>
     </template>
-  </div>
+  </section>
 </template>
 
 <script>
 import Cell from './Cell.vue'
 import CopyButton from './CopyButton.vue'
-import { cellsToBinaryString } from '../cells'
+import { cellsToBinaryString, createCells } from '../cells'
 import { hintsForCells } from '../hint_generator'
 import { mapState, mapGetters } from 'vuex'
 
@@ -78,7 +94,9 @@ export default {
       secondaryActionEnabledButtons: [
         { text: 'Select', value: false },
         { text: 'Mark', value: true }
-      ]
+      ],
+      rows: this.$store.state.cells.length,
+      columns: this.$store.state.cells[0].length
     }
   },
   methods: {
@@ -95,6 +113,9 @@ export default {
     },
     toggleIsSecondaryActionEnabled () {
       this.$store.commit('toggleIsSecondaryActionEnabled')
+    },
+    resetBoard () {
+      this.$store.state.cells = createCells(this.rows, this.columns)
     }
   },
   computed: {
@@ -122,6 +143,20 @@ export default {
     },
     formattedId () {
       return this.id.toString().padStart(3, '0')
+    },
+    rowsTitle () {
+      return `Rows: ${this.rows}`
+    },
+    columnsTitle () {
+      return `Columns: ${this.columns}`
+    }
+  },
+  watch: {
+    rows () {
+      this.resetBoard()
+    },
+    columns () {
+      this.resetBoard()
     }
   },
   created () {
