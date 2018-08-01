@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Board from '../components/Board.vue'
+import Tutorial from '../views/Tutorial.vue'
 import { binaryStringToCells, createCells } from '../cells'
 import BINARY_CELLS from '../cell_data'
 
@@ -8,6 +9,11 @@ Vue.use(Router)
 
 export default new Router({
   routes: [
+    {
+      path: '/',
+      name: 'home',
+      component: Tutorial
+    },
     {
       path: '/boards/:id',
       name: 'boards',

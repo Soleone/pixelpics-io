@@ -2,7 +2,9 @@
   <div id="app" class="container">
     <b-navbar toggleable="md" variant="light">
       <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
-      <b-navbar-brand class="mb-0 h1" href="#">Pixel Pics</b-navbar-brand>
+      <b-navbar-brand class="mb-0 h1" href="/">
+        Pixel Pics
+      </b-navbar-brand>
 
       <b-collapse is-nav id="nav_collapse">
         <b-navbar-nav>
