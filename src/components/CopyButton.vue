@@ -16,9 +16,7 @@
   </b-input-group>
 </template>
 
-
 <script>
-
 export default {
   name: 'CopyButton',
   props: [
@@ -26,21 +24,20 @@ export default {
     'title'
   ],
   methods: {
-    copyToClipboard() {
-      let input = document.getElementById('input-to-copy');
-      input.select();
-      document.execCommand('copy');
-      input.blur();
-      this.$root.$emit('bv::hide::tooltip');
-      this.$refs.copiedFeedbackTooltip.$emit('open');
-      setTimeout( () => {
-        this.$root.$emit('bv::hide::tooltip');
-      }, 1000);
+    copyToClipboard () {
+      let input = document.getElementById('input-to-copy')
+      input.select()
+      document.execCommand('copy')
+      input.blur()
+      this.$root.$emit('bv::hide::tooltip')
+      this.$refs.copiedFeedbackTooltip.$emit('open')
+      setTimeout(() => {
+        this.$root.$emit('bv::hide::tooltip')
+      }, 1000)
     }
-  },
+  }
 }
 </script>
-
 
 <style scoped>
   .code-text {

@@ -61,42 +61,41 @@
   </div>
 </template>
 
-
 <script>
-import Cell from './Cell.vue';
-import CopyButton from './CopyButton.vue';
-import { cellsToBinaryString } from '../cells';
-import { hintsForCells } from '../hint_generator';
-import { mapState, mapGetters } from 'vuex';
+import Cell from './Cell.vue'
+import CopyButton from './CopyButton.vue'
+import { cellsToBinaryString } from '../cells'
+import { hintsForCells } from '../hint_generator'
+import { mapState, mapGetters } from 'vuex'
 
-const REQUIRES_RESIZE_THRESHOLD = 7;
+const REQUIRES_RESIZE_THRESHOLD = 7
 
 export default {
   name: 'Board',
   props: ['params'],
-  data() {
+  data () {
     return {
       secondaryActionEnabledButtons: [
         { text: 'Select', value: false },
-        { text: 'Mark', value: true },
+        { text: 'Mark', value: true }
       ]
-    };
+    }
   },
   methods: {
-    cellKey(x, y) {
-      return x + "-" + y;
+    cellKey (x, y) {
+      return x + '-' + y
     },
-    hints(index) {
-      let row = this.cells[index];
-      return hintsForCells(row).join(' ');
+    hints (index) {
+      let row = this.cells[index]
+      return hintsForCells(row).join(' ')
     },
-    columnHints(x) {
-      let column = this.transposedCells[x];
-      return hintsForCells(column);
+    columnHints (x) {
+      let column = this.transposedCells[x]
+      return hintsForCells(column)
     },
-    toggleIsSecondaryActionEnabled() {
-      this.$store.commit('toggleIsSecondaryActionEnabled');
-    },
+    toggleIsSecondaryActionEnabled () {
+      this.$store.commit('toggleIsSecondaryActionEnabled')
+    }
   },
   computed: {
     ...mapState([
@@ -110,35 +109,34 @@ export default {
     ...mapGetters([
       'nextId'
     ]),
-    cellsToBinaryString() {
+    cellsToBinaryString () {
       return cellsToBinaryString(this.cells)
     },
-    transposedCells() {
-      return this.cells[0].map( (column, columnIndex) => {
-        return this.cells.map(row => row[columnIndex]);
-      });
+    transposedCells () {
+      return this.cells[0].map((column, columnIndex) => {
+        return this.cells.map(row => row[columnIndex])
+      })
     },
-    requiresCellResize() {
-      return this.cells[0].length > REQUIRES_RESIZE_THRESHOLD;
+    requiresCellResize () {
+      return this.cells[0].length > REQUIRES_RESIZE_THRESHOLD
     },
-    formattedId() {
-      return this.id.toString().padStart(3, "0");
+    formattedId () {
+      return this.id.toString().padStart(3, '0')
     }
   },
-  created() {
-    this.$store.state.cells = this.params.cells || this.$store.state.default.cells;
-    this.$store.state.editMode = this.params.editMode || false;
-    this.$store.state.id = this.params.id;
-    this.$store.state.title = this.params.title;
-    this.$store.state.isCompleted = false;
+  created () {
+    this.$store.state.cells = this.params.cells || this.$store.state.default.cells
+    this.$store.state.editMode = this.params.editMode || false
+    this.$store.state.id = this.params.id
+    this.$store.state.title = this.params.title
+    this.$store.state.isCompleted = false
   },
   components: {
     Cell,
-    CopyButton,
+    CopyButton
   }
 }
 </script>
-
 
 <style scoped>
   .board {

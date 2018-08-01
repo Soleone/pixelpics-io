@@ -4,38 +4,35 @@
   </div>
 </template>
 
-
 <script>
-import { hintsForCells } from '../hint_generator';
+import { hintsForCells } from '../hint_generator'
 
 export default {
   name: 'Hint',
   props: [
     'vertical',
-    'cells',
+    'cells'
   ],
   methods: {
-    hints(index) {
-      let row = this.cells[index];
-      return hintsForCells(row).join(' ');
+    hints (index) {
+      let row = this.cells[index]
+      return hintsForCells(row).join(' ')
     },
-    columnHints(x) {
-      let column = this.transposedCells[x];
-      return hintsForCells(column);
-    },
-
+    columnHints (x) {
+      let column = this.transposedCells[x]
+      return hintsForCells(column)
+    }
   },
   computed: {
-    filledCells() {
-
+    filledCells () {
+      return null
     },
-    selectedCells() {
-
-    },
-  },
+    selectedCells () {
+      return null
+    }
+  }
 }
 </script>
-
 
 <style scoped>
   .hint {

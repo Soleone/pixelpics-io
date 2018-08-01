@@ -8,86 +8,84 @@
   </transition>
 </template>
 
-
 <script>
-import { mapState } from 'vuex';
+import { mapState } from 'vuex'
 
 export default {
   name: 'Cell',
   props: ['x', 'y'],
-  data() {
+  data () {
     return {
       enterTransition: null
     }
   },
   methods: {
-    primaryOrSecondaryAction() {
+    primaryOrSecondaryAction () {
       if (this.isSecondaryActionEnabled) {
-        this.secondaryAction();
+        this.secondaryAction()
       } else {
-        this.primaryAction();
+        this.primaryAction()
       }
     },
-    primaryAction() {
-      if (this.isCompleted) return;
+    primaryAction () {
+      if (this.isCompleted) return
 
       if (this.editMode) {
-        this.toggleFilled();
+        this.toggleFilled()
       } else {
-        this.toggleSelected();
+        this.toggleSelected()
       }
     },
-    secondaryAction() {
-      if (this.isCompleted) return;
+    secondaryAction () {
+      if (this.isCompleted) return
 
       if (!this.editMode) {
-        this.toggleMark();
+        this.toggleMark()
       }
     },
-    toggleFilled() {
-      this.cell.filled = !this.cell.filled;
+    toggleFilled () {
+      this.cell.filled = !this.cell.filled
     },
-    toggleSelected() {
-      this.$store.commit('toggleCellSelected', { x: this.x, y: this.y });
+    toggleSelected () {
+      this.$store.commit('toggleCellSelected', { x: this.x, y: this.y })
     },
-    toggleMark() {
-      this.$store.commit('toggleCellMarked', { x: this.x, y: this.y });
+    toggleMark () {
+      this.$store.commit('toggleCellMarked', { x: this.x, y: this.y })
     },
-    randomBool() {
-      return (Math.random() < 0.5);
+    randomBool () {
+      return (Math.random() < 0.5)
     }
   },
   computed: {
     ...mapState([
       'editMode',
       'isCompleted',
-      'isSecondaryActionEnabled',
+      'isSecondaryActionEnabled'
     ]),
-    cell() {
-      return this.$store.getters.cellAt(this.x, this.y);
+    cell () {
+      return this.$store.getters.cellAt(this.x, this.y)
     },
-    displayFilled() {
-      return (this.cell.filled && this.editMode);
+    displayFilled () {
+      return (this.cell.filled && this.editMode)
     },
-    classes() {
+    classes () {
       return {
         filled: this.displayFilled,
         selected: this.cell.selected,
         marked: this.cell.marked && !this.isCompleted,
         bounceIn: this.displayFilled || this.cell.selected,
         zoomIn: this.cell.marked,
-        'solved-empty': this.isCompleted,
+        'solved-empty': this.isCompleted
       }
     }
   },
-  created() {
-    const verticalModifier = this.randomBool() ? '-vertical' : '';
-    const reverseModifier = this.randomBool() ? '-reverse' : '';
-    this.enterTransition = "slide-fade" + verticalModifier + reverseModifier;
+  created () {
+    const verticalModifier = this.randomBool() ? '-vertical' : ''
+    const reverseModifier = this.randomBool() ? '-reverse' : ''
+    this.enterTransition = 'slide-fade' + verticalModifier + reverseModifier
   }
 }
 </script>
-
 
 <style scoped>
   .cell {

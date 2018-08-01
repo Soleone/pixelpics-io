@@ -33,10 +33,10 @@ export default {
   computed: {
     ...mapGetters([
       'nextId',
-      'previousId',
+      'previousId'
     ]),
-    randomId() {
-      return Math.floor(Math.random() * Math.floor(Object.keys(BINARY_CELLS).length));
+    randomId () {
+      return Math.floor(Math.random() * Math.floor(Object.keys(BINARY_CELLS).length))
     }
   }
 }
