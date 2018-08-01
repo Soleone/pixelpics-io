@@ -217,7 +217,7 @@ export default {
     }
 
     .requires-cell-resize .hint-header td {
-      width: 23px;
+      width: 22px;
     }
   }
 </style>

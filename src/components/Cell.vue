@@ -104,8 +104,8 @@ export default {
 
   @media only screen and (max-width: 440px) {
     .requires-cell-resize .cell {
-      height: 24px;
-      width: 24px;
+      height: 22px;
+      width: 22px;
     }
   }
 
