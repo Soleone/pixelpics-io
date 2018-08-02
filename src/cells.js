@@ -39,6 +39,18 @@ function createCells (rows, columns, cellFunction = newCell) {
   return cells
 }
 
+function resizeCells (cells, targetRowSize, targetColumnSize) {
+  const newCells = createCells(targetRowSize, targetColumnSize)
+
+  cells.forEach((row, rowIndex) => {
+    row.forEach((cell, columnIndex) => {
+      if (newCells[rowIndex] && newCells[rowIndex][columnIndex]) {
+        newCells[rowIndex][columnIndex] = cell
+      }
+    })
+  })
+  return newCells
+}
 // function binaryStringToBinaryNumber (binaryString) {
 //   const [dimensions, binaryData] = binaryString.split(':')
 //   const [x, y] = dimensions.split('x')
@@ -87,4 +99,4 @@ function cellsToBinaryRows (cells) {
   })
 }
 
-export { binaryStringToCells, cellsToBinaryString, createCells }
+export { binaryStringToCells, cellsToBinaryString, createCells, resizeCells }

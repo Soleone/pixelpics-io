@@ -1,6 +1,7 @@
 <template>
   <section class="board-wrapper animated" :class="{'fadeLeft': isCompleted}">
 
+    <!-- Edit controls -->
     <b-container v-if="editMode">
       <b-row>
         <b-col>
@@ -9,17 +10,33 @@
         </b-col>
       </b-row>
 
-      <b-form class="row mt-3">
-        <b-form-group :label="columnsTitle" class="col">
-          <input type="range" min="3" max="10" v-model="columns" class="form-control-range" id="columns-range" />
-        </b-form-group>
+      <b-form class="mt-3">
+        <b-row>
+          <b-col>
+            <b-form-group description="Short description of your picture">
+              <b-form-input v-model="title"
+                            type="text"
+                            maxlength="12"
+                            size="lg"
+                            placeholder="My Title">
+              </b-form-input>
+            </b-form-group>
+          </b-col>
+        </b-row>
 
-        <b-form-group :label="rowsTitle" class="col">
-          <input type="range" min="3" max="10" v-model="rows" class="form-control-range" id="rows-range" />
-        </b-form-group>
+        <b-row>
+          <b-form-group :label="rowSizeTitle" class="col">
+            <b-form-input type="range" min="3" max="10" v-model="rowSize"></b-form-input>
+          </b-form-group>
+
+          <b-form-group :label="columnSizeTitle" class="col">
+            <b-form-input type="range" min="3" max="10" v-model="columnSize"></b-form-input>
+          </b-form-group>
+        </b-row>
       </b-form>
     </b-container>
 
+    <!-- Board -->
     <table class="board" :class="{'requires-cell-resize': requiresCellResize}">
       <tr class="hint-header row">
         <td class="hint-header-spacer">
@@ -48,6 +65,7 @@
       </tr>
     </table>
 
+    <!-- Game controls -->
     <template v-if="!editMode">
       <b-form-group class="mt-3">
         <b-form-radio-group id="toggle-secondary-action-enabled"
@@ -80,7 +98,7 @@
 <script>
 import Cell from './Cell.vue'
 import CopyButton from './CopyButton.vue'
-import { cellsToBinaryString, createCells } from '../cells'
+import { cellsToBinaryString, resizeCells } from '../cells'
 import { hintsForCells } from '../hint_generator'
 import { mapState, mapGetters } from 'vuex'
 
@@ -95,8 +113,8 @@ export default {
         { text: 'Select', value: false },
         { text: 'Mark', value: true }
       ],
-      rows: this.$store.state.cells.length,
-      columns: this.$store.state.cells[0].length
+      rowSize: 6,
+      columnSize: 6
     }
   },
   methods: {
@@ -115,7 +133,7 @@ export default {
       this.$store.commit('toggleIsSecondaryActionEnabled')
     },
     resetBoard () {
-      this.$store.state.cells = createCells(this.rows, this.columns)
+      this.$store.state.cells = resizeCells(this.$store.state.cells, this.rowSize, this.columnSize)
     }
   },
   computed: {
@@ -144,23 +162,25 @@ export default {
     formattedId () {
       return this.id.toString().padStart(3, '0')
     },
-    rowsTitle () {
-      return `Rows: ${this.rows}`
+    rowSizeTitle () {
+      return `Rows: ${this.rowSize}`
     },
-    columnsTitle () {
-      return `Columns: ${this.columns}`
+    columnSizeTitle () {
+      return `Columns: ${this.columnSize}`
     }
   },
   watch: {
-    rows () {
+    rowSize () {
       this.resetBoard()
     },
-    columns () {
+    columnSize () {
       this.resetBoard()
     }
   },
   created () {
     this.$store.state.cells = this.params.cells || this.$store.state.default.cells
+    this.rowSize = this.$store.state.cells.length
+    this.columnSize = this.$store.state.cells[0].length
     this.$store.state.editMode = this.params.editMode || false
     this.$store.state.id = this.params.id
     this.$store.state.title = this.params.title
@@ -174,6 +194,10 @@ export default {
 </script>
 
 <style scoped>
+  .board-wrapper {
+    margin-bottom: 60px;
+  }
+
   .board {
     padding:0;
     margin:0;
