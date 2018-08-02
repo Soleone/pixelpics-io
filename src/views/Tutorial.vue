@@ -3,13 +3,18 @@
     <b-row align-h="center">
       <h2>How to play</h2>
     </b-row>
+    <b-row>
+      <b-col align-h="center" class="text-center mt-3">
+        <b-alert show variant="success">{{ carouselTitle }}</b-alert>
+      </b-col>
+    </b-row>
     <b-row align-h="center">
       <b-col cols="10" md="8" lg="6" xl="4">
         <b-carousel class="tutorial-carousel"
                     controls
                     indicators
                     :background="background"
-                    interval=""
+                    interval="5000"
                     img-width="200"
                     img-height="220"
                     v-model="slide"
@@ -37,7 +42,7 @@
     </b-row>
     <b-row>
       <b-col align-h="center" class="text-center mt-3">
-        <b-alert show variant="success">{{ carouselTitle }}</b-alert>
+        <b-btn variant="danger" :to="{name: 'boards', params: {id: 1 }}">Skip tutorial</b-btn>
       </b-col>
     </b-row>
   </b-container>
