@@ -1,13 +1,13 @@
-function hintsForCells (cellsArray) {
+function hintsForCells (cellsArray, propertyName = 'filled') {
   const numbers = []
   let pending = null
 
   cellsArray.forEach(cell => {
-    if (cell.filled && !pending) {
+    if (cell[propertyName] && !pending) {
       pending = 1
-    } else if (cell.filled && pending) {
+    } else if (cell[propertyName] && pending) {
       pending++
-    } else if (!cell.filled && pending) {
+    } else if (!cell[propertyName] && pending) {
       numbers.push(pending)
       pending = null
     }

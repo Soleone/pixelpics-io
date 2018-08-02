@@ -44,20 +44,14 @@
             <!-- empty placeholder -->
           </div>
         </td>
-          <td v-for="(_, y) in cells[0]" :key="`hint-col-${y}`">
-            <div class="hint hint-column">
-              <div v-for="(hint, index) in columnHints(y).reverse()" :key="`hint-item-${index}`" class="hint-item">
-                {{ hint }}
-              </div>
-            </div>
-          </td>
+        <td v-for="(_, y) in rows[0]" :key="`hint-col-${y}`">
+          <hint-series isVertical="true" :cells="columns[y]"/>
+        </td>
       </tr>
 
-      <tr v-for="(row, y) in cells" class="row" :key="`row-${y}`">
+      <tr v-for="(row, y) in rows" class="row" :key="`row-${y}`">
         <td>
-          <div class="hint hint-row">
-            {{ hints(y) }}
-          </div>
+          <hint-series :isVertical="false" :cells="row"/>
         </td>
 
         <cell v-for="(cell, x) in row" :key="cell.id" :x="x" :y="y">
@@ -97,6 +91,7 @@
 
 <script>
 import Cell from './Cell.vue'
+import HintSeries from './HintSeries.vue'
 import CopyButton from './CopyButton.vue'
 import { cellsToBinaryString, resizeCells } from '../cells'
 import { hintsForCells } from '../hint_generator'
@@ -121,12 +116,12 @@ export default {
     cellKey (x, y) {
       return x + '-' + y
     },
-    hints (index) {
-      let row = this.cells[index]
-      return hintsForCells(row).join(' ')
+    rowHints (y) {
+      let row = this.rows[y]
+      return hintsForCells(row)
     },
     columnHints (x) {
-      let column = this.transposedCells[x]
+      let column = this.columns[x]
       return hintsForCells(column)
     },
     toggleIsSecondaryActionEnabled () {
@@ -149,15 +144,18 @@ export default {
       'nextId'
     ]),
     cellsToBinaryString () {
-      return cellsToBinaryString(this.cells)
+      return cellsToBinaryString(this.rows)
     },
-    transposedCells () {
-      return this.cells[0].map((column, columnIndex) => {
-        return this.cells.map(row => row[columnIndex])
+    rows () {
+      return this.cells
+    },
+    columns () {
+      return this.rows[0].map((column, columnIndex) => {
+        return this.rows.map(row => row[columnIndex])
       })
     },
     requiresCellResize () {
-      return this.cells[0].length > REQUIRES_RESIZE_THRESHOLD
+      return this.rows[0].length > REQUIRES_RESIZE_THRESHOLD
     },
     formattedId () {
       return this.id.toString().padStart(3, '0')
@@ -188,7 +186,8 @@ export default {
   },
   components: {
     Cell,
-    CopyButton
+    CopyButton,
+    HintSeries
   }
 }
 </script>
@@ -232,42 +231,12 @@ export default {
     height: 32px;
   }
 
-  .hint {
-    display: inline-block;
-    margin: 2px;
-    padding: 4px;
-    text-align: right;
-    font-weight: bold;
-    font-size: 12px;
-    color: #666666;
-    background-color: #ffffff;
-    cursor: default;
-  }
-
-  .hint-row {
+  .hint-header .hint-header-spacer {
     width: 64px;
-    padding:0;
-    margin: 0 8px 0 0;
-  }
-
-  .hint-column {
-    height: 96px;
-    width: 32px;
-    padding-right: 8px;
-    display: flex;
-    flex-direction: column-reverse;
-  }
-
-  .hint-item {
-    align-self: flex-end;
   }
 
   .hint-header td {
     width: 32px;
-  }
-
-  .hint-header .hint-header-spacer {
-    width: 64px;
   }
 
   @media only screen and (max-width: 446px) {
