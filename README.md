@@ -1,27 +1,14 @@
-# pixelpics-io
+# Pixel Pics
 
-> Pixel Pics puzzle game
+A javascript puzzle game
 
-## Build Setup
+## Features
 
-``` bash
-# install dependencies
-npm install
+Live at https://www.pixelpics.io
 
-# serve with hot reload at localhost:8080
-npm run dev
+## Running in development mode
 
-# build for production with minification
-npm run build
-
-# build for production and view the bundle analyzer report
-npm run build --report
-
-# run unit tests
-npm run unit
-
-# run all tests
-npm test
-```
-
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+1. Clone the repo
+2. `npm install` to install the dependencies
+3. `npm run dev` to start the local server
+4. Visit http://localhost:8080
