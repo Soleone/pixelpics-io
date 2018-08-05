@@ -9,14 +9,12 @@
       </b-col>
     </b-row>
     <b-row align-h="center">
-      <b-col cols="10" md="8" lg="6" xl="4">
+      <b-col cols="10" sm="8" md="6" lg="4" xl="4">
         <b-carousel class="tutorial-carousel"
                     controls
                     indicators
                     :background="background"
                     interval="5000"
-                    img-width="200"
-                    img-height="220"
                     v-model="slide"
         >
           <b-carousel-slide img-blank>
@@ -72,7 +70,7 @@ export default {
       return CAROUSEL_TITLES[this.slide]
     },
     background () {
-      return this.slide === CAROUSEL_TITLES.length - 1 ? '#fefefe' : '#cccccc'
+      return this.slide === CAROUSEL_TITLES.length - 1 ? '#fefefe' : '#d4d4d4'
     }
   }
 }
