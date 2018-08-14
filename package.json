@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "description": "Pixel Pics puzzle game",
   "author": "Sole One <soleone@gmail.com>",
+  "homepage": "https://github.com/Soleone/pixelpics-io#readme",
   "private": true,
   "scripts": {
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
@@ -19,7 +20,8 @@
     "vuex": "^3.0.0",
     "bootstrap-vue": "^v2.0.0-rc.11",
     "vue2-animate": "^2.0.0",
-    "vue-awesome": "^3.0.5"
+    "vue-awesome": "^3.0.5",
+    "big.js": "^5.1.0"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",
