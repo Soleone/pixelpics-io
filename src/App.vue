@@ -19,12 +19,15 @@
             Scatter supported
           </b-nav-item>
 
-          <b-nav-item v-if="scatter && !accountName" href @click="scatterConnect" class="icon-link">
-            <icon name="plug"></icon>
-            <span>Connect Scatter</span>
-          </b-nav-item>
+          <transition name="bounce" leave-active-class="bounceUp">
+            <b-nav-item v-if="scatter && !accountName" href @click="scatterConnect">
+              <icon name="plug"></icon>
+              <span>Connect Scatter</span>
+            </b-nav-item>
+          </transition>
 
-          <b-nav-item v-if="accountName" href @click="scatterDisconnect" class="icon-link">
+
+          <b-nav-item v-if="accountName" href @click="scatterDisconnect">
             <icon name="sign-out-alt"></icon>
             <span>Disconnect {{ accountName }}</span>
           </b-nav-item>
@@ -69,8 +72,10 @@ export default {
       await this.scatter.getIdentity(requiredFields).then((identity) => {
         console.log('Got identity: ' + identity.name)
         console.log(identity)
-        const accountName = identity.accounts[0].name
-        this.$store.commit('setAccountName', accountName)
+        if (identity.accounts.length) {
+          const accountName = identity.accounts[0].name
+          this.$store.commit('setAccountName', accountName)
+        }
       }).catch((error) => {
         console.log('Error getting identity: ' + error)
       })
