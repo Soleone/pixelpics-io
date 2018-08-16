@@ -26,7 +26,6 @@
             </b-nav-item>
           </transition>
 
-
           <b-nav-item v-if="accountName" href @click="scatterDisconnect">
             <icon name="sign-out-alt"></icon>
             <span>Disconnect {{ accountName }}</span>
