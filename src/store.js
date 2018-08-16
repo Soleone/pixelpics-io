@@ -17,7 +17,7 @@ const store = new Vuex.Store({
     isCompleted: false,
     isSecondaryActionEnabled: false,
     scatter: null,
-    scatterIdentity: null
+    accountName: null
   },
   mutations: {
     toggleCellSelected (state, cellPosition) {
@@ -37,8 +37,8 @@ const store = new Vuex.Store({
     setScatter (state, scatter) {
       state.scatter = scatter
     },
-    setScatterIdentity (state, scatterIdentity) {
-      state.scatterIdentity = scatterIdentity
+    setAccountName (state, accountName) {
+      state.accountName = accountName
     }
   },
   getters: {

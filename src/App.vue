@@ -19,14 +19,14 @@
             Scatter supported
           </b-nav-item>
 
-          <b-nav-item v-if="scatter && !scatterIdentity" href @click="scatterConnect" class="icon-link">
+          <b-nav-item v-if="scatter && !accountName" href @click="scatterConnect" class="icon-link">
             <icon name="plug"></icon>
             <span>Connect Scatter</span>
           </b-nav-item>
 
-          <b-nav-item v-if="scatterIdentity" href @click="scatterDisconnect" class="icon-link">
+          <b-nav-item v-if="accountName" href @click="scatterDisconnect" class="icon-link">
             <icon name="sign-out-alt"></icon>
-            <span>Disconnect {{ scatterIdentity }}</span>
+            <span>Disconnect {{ accountName }}</span>
           </b-nav-item>
         </b-navbar-nav>
       </b-collapse>
@@ -51,7 +51,7 @@ export default {
   computed: {
     ...mapState([
       'scatter',
-      'scatterIdentity'
+      'accountName'
     ]),
     ...mapGetters([
       'nextId',
@@ -63,17 +63,21 @@ export default {
   },
   methods: {
     async scatterConnect () {
-      await this.scatter.getIdentity().then((identity) => {
+      const eosMainnet = { blockchain: 'EOS', chainId: 'aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906' }
+      const requiredFields = { accounts: [eosMainnet] }
+
+      await this.scatter.getIdentity(requiredFields).then((identity) => {
         console.log('Got identity: ' + identity.name)
         console.log(identity)
-        this.$store.commit('setScatterIdentity', identity.name)
+        const accountName = identity.accounts[0].name
+        this.$store.commit('setAccountName', accountName)
       }).catch((error) => {
         console.log('Error getting identity: ' + error)
       })
     },
     async scatterDisconnect () {
       await this.scatter.forgetIdentity()
-      this.$store.commit('setScatterIdentity', null)
+      this.$store.commit('setAccountName', null)
     }
   }
 }
