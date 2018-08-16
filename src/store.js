@@ -15,7 +15,9 @@ const store = new Vuex.Store({
     id: null,
     title: null,
     isCompleted: false,
-    isSecondaryActionEnabled: false
+    isSecondaryActionEnabled: false,
+    scatter: null,
+    scatterIdentity: null
   },
   mutations: {
     toggleCellSelected (state, cellPosition) {
@@ -31,6 +33,12 @@ const store = new Vuex.Store({
     },
     toggleIsSecondaryActionEnabled (state) {
       state.isSecondaryActionEnabled = !state.isSecondaryActionEnabled
+    },
+    setScatter (state, scatter) {
+      state.scatter = scatter
+    },
+    setScatterIdentity (state, scatterIdentity) {
+      state.scatterIdentity = scatterIdentity
     }
   },
   getters: {
@@ -40,12 +48,12 @@ const store = new Vuex.Store({
       }
     },
     nextId (state) {
-      if (state.id == null) return 1
+      if (state.id === null) return 1
 
       return (parseInt(state.id) % Object.keys(BINARY_CELLS).length) + 1
     },
     previousId (state) {
-      if (state.id == null) return 1
+      if (state.id === null) return 1
 
       return (parseInt(state.id) % Object.keys(BINARY_CELLS).length) - 1
     }
