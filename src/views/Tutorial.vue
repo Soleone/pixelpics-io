@@ -14,7 +14,7 @@
                     controls
                     indicators
                     :background="background"
-                    interval="5000"
+                    :interval="5000"
                     v-model="slide"
         >
           <b-carousel-slide img-blank>
