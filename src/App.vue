@@ -12,6 +12,7 @@
           <b-nav-item :to="{name: 'boards', params: {id: randomId }}">Random</b-nav-item>
           <b-nav-item :to="{name: 'boards', params: {id: previousId }}">Previous</b-nav-item>
           <b-nav-item :to="{name: 'boards', params: {id: nextId }}">Next</b-nav-item>
+          <b-nav-item v-b-modal="'about-modal'">About</b-nav-item>
         </b-navbar-nav>
 
         <b-navbar-nav class="ml-auto">
@@ -37,6 +38,12 @@
         </b-navbar-nav>
       </b-collapse>
     </b-navbar>
+
+    <b-modal id="about-modal" title="Pixel Pics" :ok-only="true" ok-title="Thanks" ok-variant="secondary">
+      Built by <a href="https://soleone.github.io" target="_blank">Sole One</a>.
+      All code <a href="https://github.com/soleone/pixelpics-io" target="_blank">open source</a>.
+      Powered by <a href="https://eos.io" target="_blank">EOS</a>.
+    </b-modal>
 
     <router-view :key="$route.fullPath" />
   </div>
