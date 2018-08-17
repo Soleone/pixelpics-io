@@ -32,6 +32,7 @@ const store = new Vuex.Store({
       const cell = this.getters.cellAt(cellPosition.x, cellPosition.y)
       cell.selected = false
       cell.marked = !cell.marked
+      this.checkIsComplete(state)
     },
     toggleIsSecondaryActionEnabled (state) {
       state.isSecondaryActionEnabled = !state.isSecondaryActionEnabled
