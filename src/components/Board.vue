@@ -65,6 +65,7 @@
         <b-form-radio-group id="toggle-secondary-action-enabled"
         buttons
         button-variant="outline-secondary"
+        size="sm"
         v-bind:checked="isSecondaryActionEnabled"
         @change="toggleIsSecondaryActionEnabled"
         :options="secondaryActionEnabledButtons" />
@@ -75,7 +76,7 @@
           <b-badge pill variant="secondary">
             {{ formattedId }}
           </b-badge>
-          <span class="ml-2">{{ title }}</span>
+          <span class="ml-2 text-uppercase font-weight-light">{{ title }}</span>
         </div>
       </h4>
 
