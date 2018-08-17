@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import { binaryStringToCells } from './cells'
 import BINARY_CELLS from './cell_data'
+import { EOS_MAIN_NET } from './constants'
 
 Vue.use(Vuex)
 
@@ -17,7 +18,8 @@ const store = new Vuex.Store({
     isCompleted: false,
     isSecondaryActionEnabled: false,
     scatter: null,
-    accountName: null
+    accountName: null,
+    network: EOS_MAIN_NET
   },
   mutations: {
     toggleCellSelected (state, cellPosition) {

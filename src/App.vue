@@ -15,7 +15,11 @@
         </b-navbar-nav>
 
         <b-navbar-nav class="ml-auto">
-          <b-nav-item v-if="!scatter" href="https://www.get-scatter.com" v-b-tooltip.hover title="Install or unlock Scatter to connect to the EOS blockchain.">
+          <b-nav-item-dropdown :text="networkName">
+            <b-nav-item @click="setNetworkName('Mainnet')">Mainnet</b-nav-item>
+            <b-nav-item @click="setNetworkName('Testnet')">Testnet</b-nav-item>
+          </b-nav-item-dropdown>
+          <b-nav-item v-if="!scatter" href="https://www.get-scatter.com" target="_blank" v-b-tooltip.hover title="Install or unlock Scatter to connect to the EOS blockchain.">
             Scatter supported
           </b-nav-item>
 
@@ -42,6 +46,7 @@
 import Cell from './components/Cell.vue'
 import Board from './components/Board.vue'
 import BINARY_CELLS from './cell_data'
+import { EOS_MAIN_NET, JUNGLE_NET } from './constants'
 import { mapState, mapGetters } from 'vuex'
 
 export default {
@@ -49,6 +54,11 @@ export default {
   components: {
     Board,
     Cell
+  },
+  data () {
+    return {
+      networkName: 'Mainnet'
+    }
   },
   computed: {
     ...mapState([
@@ -61,12 +71,15 @@ export default {
     ]),
     randomId () {
       return Math.floor(Math.random() * Math.floor(Object.keys(BINARY_CELLS).length))
+    },
+    network () {
+      return this.networkName === 'Mainnet' ? EOS_MAIN_NET : JUNGLE_NET
     }
   },
   methods: {
     async scatterConnect () {
-      const eosMainnet = { blockchain: 'EOS', chainId: 'aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906' }
-      const requiredFields = { accounts: [eosMainnet] }
+      this.scatter.suggestNetwork(this.network)
+      const requiredFields = { accounts: [this.network] }
 
       await this.scatter.getIdentity(requiredFields).then((identity) => {
         console.log('Got identity: ' + identity.name)
@@ -82,6 +95,9 @@ export default {
     async scatterDisconnect () {
       await this.scatter.forgetIdentity()
       this.$store.commit('setAccountName', null)
+    },
+    setNetworkName (networkName) {
+      this.networkName = networkName
     }
   }
 }
