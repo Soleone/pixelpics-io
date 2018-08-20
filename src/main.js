@@ -9,11 +9,22 @@ import ScatterJS from 'scatter-js/dist/scatter.esm'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import 'vue2-animate/dist/vue2-animate.min.css'
+import VueAnalytics from 'vue-analytics'
+
+const GOOGLE_ANALTICS_ID = 'UA-123892985-1'
 
 Vue.use(BootstrapVue)
 Vue.component('icon', Icon)
 
 Vue.config.productionTip = false
+
+Vue.use(VueAnalytics, {
+  id: GOOGLE_ANALTICS_ID,
+  router,
+  debug: {
+    sendHitTask: process.env.NODE_ENV === 'production'
+  }
+})
 
 new Vue({
   router,
