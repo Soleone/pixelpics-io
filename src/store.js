@@ -56,7 +56,7 @@ const store = new Vuex.Store({
       return (parseInt(state.id) % Object.keys(BINARY_CELLS).length) + 1
     },
     previousId (state) {
-      if (state.id === null) return 1
+      if (state.id === null || state.id === 1) return 1
 
       return (parseInt(state.id) % Object.keys(BINARY_CELLS).length) - 1
     }
