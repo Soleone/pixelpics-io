@@ -18,11 +18,25 @@ Vue.component('icon', Icon)
 
 Vue.config.productionTip = false
 
+const isProduction = process.env.NODE_ENV === 'production'
+
 Vue.use(VueAnalytics, {
   id: GOOGLE_ANALTICS_ID,
   router,
   debug: {
+    enabled: !isProduction,
     sendHitTask: process.env.NODE_ENV === 'production'
+  },
+  commands: {
+    tutorial (eventName) {
+      this.$ga.event('Tutorial', eventName)
+    },
+    pixelPic (eventName) {
+      this.$ga.event('PixelPic', eventName)
+    },
+    navigation (eventName) {
+      this.$ga.event('Navigation', eventName)
+    }
   }
 })
 

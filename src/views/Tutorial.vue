@@ -36,21 +36,20 @@
             <b-img thumbnail src="/static/tutorial-screen5.png" />
           </b-carousel-slide>
           <b-carousel-slide img-blank>
-            <b-btn :to="{name: 'boards', params: {id: 1 }}">Start a new game</b-btn>
+            <b-btn :to="{name: 'boards', params: {id: 1 }}" v-ga="$ga.commands.tutorial.bind(this, 'start')">Start a new game</b-btn>
           </b-carousel-slide>
         </b-carousel>
       </b-col>
     </b-row>
     <b-row>
       <b-col align-h="center" class="text-center mt-3">
-        <b-btn v-show="!isLastSlide " variant="danger" :to="{name: 'boards', params: {id: 1 }}">Skip tutorial</b-btn>
+        <b-btn v-show="!isLastSlide " variant="danger" :to="{name: 'boards', params: {id: 1 }}" v-ga="$ga.commands.tutorial.bind(this, 'skip')">Skip tutorial</b-btn>
       </b-col>
     </b-row>
   </b-container>
 </template>
 
 <script>
-
 const CAROUSEL_TITLES = [
   [
     'Uncover the secret picture.',

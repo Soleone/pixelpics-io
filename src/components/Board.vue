@@ -18,7 +18,8 @@
                             type="text"
                             maxlength="12"
                             size="lg"
-                            placeholder="My Title">
+                            placeholder="My Title"
+                            v-ga.keydown="$ga.commands.pixelPic.bind(this, 'changeTitle')">
               </b-form-input>
             </b-form-group>
           </b-col>
@@ -26,11 +27,11 @@
 
         <b-row>
           <b-form-group :label="rowSizeTitle" class="col">
-            <b-form-input type="range" min="3" max="10" v-model="rowSize"></b-form-input>
+            <b-form-input type="range" min="3" max="10" v-model="rowSize" v-ga="$ga.commands.pixelPic.bind(this, 'changeRowSize')"></b-form-input>
           </b-form-group>
 
           <b-form-group :label="columnSizeTitle" class="col">
-            <b-form-input type="range" min="3" max="10" v-model="columnSize"></b-form-input>
+            <b-form-input type="range" min="3" max="10" v-model="columnSize" v-ga="$ga.commands.pixelPic.bind(this, 'changeColumnSize')"></b-form-input>
           </b-form-group>
         </b-row>
       </b-form>
@@ -68,7 +69,8 @@
         size="sm"
         v-bind:checked="isSecondaryActionEnabled"
         @change="toggleIsSecondaryActionEnabled"
-        :options="secondaryActionEnabledButtons" />
+        :options="secondaryActionEnabledButtons"
+        v-ga="$ga.commands.pixelPic.bind(this, 'toggleIsSecondaryActionEnabled')" />
       </b-form-group>
 
       <h4 class="pixture-title container bg-light text-secondary text-left p-3 mt-3">
@@ -96,7 +98,7 @@ import HintSeries from './HintSeries.vue'
 import CopyButton from './CopyButton.vue'
 import { cellsToBinaryString, resizeCells } from '../cells'
 import { hintsForCells } from '../hint_generator'
-import { mapState, mapGetters } from 'vuex'
+import { mapState, mapGetters, mapMutations } from 'vuex'
 
 const REQUIRES_RESIZE_THRESHOLD = 7
 
@@ -111,25 +113,6 @@ export default {
       ],
       rowSize: 6,
       columnSize: 6
-    }
-  },
-  methods: {
-    cellKey (x, y) {
-      return x + '-' + y
-    },
-    rowHints (y) {
-      let row = this.rows[y]
-      return hintsForCells(row)
-    },
-    columnHints (x) {
-      let column = this.columns[x]
-      return hintsForCells(column)
-    },
-    toggleIsSecondaryActionEnabled () {
-      this.$store.commit('toggleIsSecondaryActionEnabled')
-    },
-    resetBoard () {
-      this.$store.state.cells = resizeCells(this.$store.state.cells, this.rowSize, this.columnSize)
     }
   },
   computed: {
@@ -166,6 +149,25 @@ export default {
     },
     columnSizeTitle () {
       return `Columns: ${this.columnSize}`
+    }
+  },
+  methods: {
+    ...mapMutations([
+      'toggleIsSecondaryActionEnabled'
+    ]),
+    cellKey (x, y) {
+      return x + '-' + y
+    },
+    rowHints (y) {
+      let row = this.rows[y]
+      return hintsForCells(row)
+    },
+    columnHints (x) {
+      let column = this.columns[x]
+      return hintsForCells(column)
+    },
+    resetBoard () {
+      this.$store.state.cells = resizeCells(this.$store.state.cells, this.rowSize, this.columnSize)
     }
   },
   watch: {

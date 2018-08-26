@@ -11,7 +11,7 @@
           <b-nav-item to="/new">Create</b-nav-item>
           <b-nav-item :to="{name: 'boards', params: {id: randomDifferentId() }}">Random</b-nav-item>
           <b-nav-item :to="{name: 'boards', params: {id: nextId }}">Next</b-nav-item>
-          <b-nav-item v-b-modal="'about-modal'">About</b-nav-item>
+          <b-nav-item v-b-modal="'about-modal'" v-ga="$ga.commands.navigation.bind(this, 'about')">About</b-nav-item>
         </b-navbar-nav>
 
         <b-navbar-nav class="ml-auto">
