@@ -1,3 +1,5 @@
+import Decimal from 'decimal.js'
+
 const DIMENSION_DELIMITER = 'x'
 const DATA_DELIMITER = ':'
 
@@ -51,6 +53,12 @@ function resizeCells (cells, targetRowSize, targetColumnSize) {
   })
   return newCells
 }
+
+function decimalToHex (decimal, pad = 32) {
+  const [, hexdata] = new Decimal(decimal).toHex().split('x')
+  return `0x${hexdata.padStart(pad, '0')}`
+}
+
 // function binaryStringToBinaryNumber (binaryString) {
 //   const [dimensions, binaryData] = binaryString.split(':')
 //   const [x, y] = dimensions.split('x')
@@ -99,4 +107,4 @@ function cellsToBinaryRows (cells) {
   })
 }
 
-export { binaryStringToCells, cellsToBinaryString, createCells, resizeCells }
+export { binaryStringToCells, cellsToBinaryString, decimalToHex, createCells, resizeCells }
