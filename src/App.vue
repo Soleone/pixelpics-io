@@ -9,8 +9,8 @@
       <b-collapse is-nav id="nav_collapse">
         <b-navbar-nav>
           <b-nav-item to="/new">Create</b-nav-item>
-          <b-nav-item :to="{name: 'boards', params: {id: randomId }}">Random</b-nav-item>
           <b-nav-item :to="{name: 'boards', params: {id: previousId }}">Previous</b-nav-item>
+          <b-nav-item :to="{name: 'boards', params: {id: randomDifferentId() }}">Random</b-nav-item>
           <b-nav-item :to="{name: 'boards', params: {id: nextId }}">Next</b-nav-item>
           <b-nav-item v-b-modal="'about-modal'">About</b-nav-item>
         </b-navbar-nav>
@@ -70,20 +70,26 @@ export default {
   computed: {
     ...mapState([
       'scatter',
-      'accountName'
+      'accountName',
+      'id'
     ]),
     ...mapGetters([
       'nextId',
       'previousId'
     ]),
-    randomId () {
-      return Math.floor(Math.random() * Math.floor(Object.keys(BINARY_CELLS).length))
-    },
     network () {
       return this.networkName === 'Mainnet' ? EOS_MAIN_NET : JUNGLE_NET
     }
   },
   methods: {
+    randomDifferentId () {
+      let random = this.randomId()
+      return random === this.id ? this.randomDifferentId() : random
+    },
+    randomId () {
+      const max = Math.floor(Object.keys(BINARY_CELLS).length)
+      return Math.floor((Math.random() * max) + 1)
+    },
     async scatterConnect () {
       this.scatter.suggestNetwork(this.network)
       const requiredFields = { accounts: [this.network] }
