@@ -85,7 +85,10 @@
       <transition name="bounce">
         <b-alert class="mt-3" variant="success" show v-if="isCompleted && !editMode">
           You got it! Try the
-          <router-link :to="{name: 'boards', params: { id: nextId }}">next one.</router-link>
+          <router-link :to="{name: 'boards', params: { id: nextId }}" v-ga="$ga.commands.pixelPic.bind(this, 'completedNext')" >
+            next one
+          </router-link>
+          .
         </b-alert>
       </transition>
     </template>
