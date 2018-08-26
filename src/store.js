@@ -26,13 +26,11 @@ const store = new Vuex.Store({
       const cell = this.getters.cellAt(cellPosition.x, cellPosition.y)
       cell.marked = false
       cell.selected = !cell.selected
-      this.checkIsComplete(state)
     },
     toggleCellMarked (state, cellPosition) {
       const cell = this.getters.cellAt(cellPosition.x, cellPosition.y)
       cell.selected = false
       cell.marked = !cell.marked
-      this.checkIsComplete(state)
     },
     toggleIsSecondaryActionEnabled (state) {
       state.isSecondaryActionEnabled = !state.isSecondaryActionEnabled
@@ -42,6 +40,9 @@ const store = new Vuex.Store({
     },
     setAccountName (state, accountName) {
       state.accountName = accountName
+    },
+    setIsCompleted (state) {
+      state.isCompleted = true
     }
   },
   getters: {
@@ -62,16 +63,5 @@ const store = new Vuex.Store({
     }
   }
 })
-
-store.checkIsComplete = (state) => {
-  const isCompleted = state.cells.every((row) => {
-    return row.every((cell) => {
-      return cell.filled ? cell.selected : !cell.selected
-    })
-  })
-  if (isCompleted) {
-    state.isCompleted = true
-  }
-}
 
 export default store

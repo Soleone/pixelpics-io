@@ -54,27 +54,51 @@ export default {
     },
     randomBool () {
       return (Math.random() < 0.5)
+    },
+    checkIsComplete () {
+      if (this.isCompleted) return true
+
+      const isNowCompleted = this.cells.every((row) => {
+        return row.every((cell) => {
+          return cell.filled ? cell.selected : !cell.selected
+        })
+      })
+      if (isNowCompleted) {
+        this.$store.commit('setIsCompleted')
+        this.$ga.event('PixelPic', 'completed')
+      }
     }
+
   },
   computed: {
     ...mapState([
       'editMode',
       'isCompleted',
-      'isSecondaryActionEnabled'
+      'isSecondaryActionEnabled',
+      'cells'
     ]),
     cell () {
       return this.$store.getters.cellAt(this.x, this.y)
     },
+    selected () {
+      return this.cell.selected
+    },
+    marked () {
+      return this.cell.marked
+    },
+    filled () {
+      return this.cell.filled
+    },
     displayFilled () {
-      return (this.cell.filled && this.editMode)
+      return (this.filled && this.editMode)
     },
     classes () {
       return {
         filled: this.displayFilled,
-        selected: this.cell.selected,
-        marked: this.cell.marked && !this.isCompleted,
-        bounceIn: this.displayFilled || this.cell.selected,
-        zoomIn: this.cell.marked,
+        selected: this.selected,
+        marked: this.marked && !this.isCompleted,
+        bounceIn: this.displayFilled || this.selected,
+        zoomIn: this.marked,
         'solved-empty': this.isCompleted
       }
     }
@@ -83,6 +107,14 @@ export default {
     const verticalModifier = this.randomBool() ? '-vertical' : ''
     const reverseModifier = this.randomBool() ? '-reverse' : ''
     this.enterTransition = 'slide-fade' + verticalModifier + reverseModifier
+  },
+  watch: {
+    selected () {
+      this.checkIsComplete()
+    },
+    marked () {
+      this.checkIsComplete()
+    }
   }
 }
 </script>
