@@ -9,7 +9,6 @@
       <b-collapse is-nav id="nav_collapse">
         <b-navbar-nav>
           <b-nav-item to="/new">Create</b-nav-item>
-          <b-nav-item :to="{name: 'boards', params: {id: previousId }}">Previous</b-nav-item>
           <b-nav-item :to="{name: 'boards', params: {id: randomDifferentId() }}">Random</b-nav-item>
           <b-nav-item :to="{name: 'boards', params: {id: nextId }}">Next</b-nav-item>
           <b-nav-item v-b-modal="'about-modal'">About</b-nav-item>
@@ -74,8 +73,7 @@ export default {
       'id'
     ]),
     ...mapGetters([
-      'nextId',
-      'previousId'
+      'nextId'
     ]),
     network () {
       return this.networkName === 'Mainnet' ? EOS_MAIN_NET : JUNGLE_NET
