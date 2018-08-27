@@ -19,7 +19,7 @@
                             maxlength="12"
                             size="lg"
                             placeholder="My Title"
-                            v-ga.keydown="$ga.commands.pixelPic.bind(this, 'changeTitle')">
+                            v-ga.keydown="$ga.commands.createPixelPic.bind(this, 'changeTitle')">
               </b-form-input>
             </b-form-group>
           </b-col>
@@ -27,11 +27,11 @@
 
         <b-row>
           <b-form-group :label="rowSizeTitle" class="col">
-            <b-form-input type="range" min="3" max="10" v-model="rowSize" v-ga="$ga.commands.pixelPic.bind(this, 'changeRowSize')"></b-form-input>
+            <b-form-input type="range" min="3" max="10" v-model="rowSize" v-ga="$ga.commands.createPixelPic.bind(this, 'changeRowSize')"></b-form-input>
           </b-form-group>
 
           <b-form-group :label="columnSizeTitle" class="col">
-            <b-form-input type="range" min="3" max="10" v-model="columnSize" v-ga="$ga.commands.pixelPic.bind(this, 'changeColumnSize')"></b-form-input>
+            <b-form-input type="range" min="3" max="10" v-model="columnSize" v-ga="$ga.commands.createPixelPic.bind(this, 'changeColumnSize')"></b-form-input>
           </b-form-group>
         </b-row>
       </b-form>
@@ -70,7 +70,7 @@
         v-bind:checked="isSecondaryActionEnabled"
         @change="toggleIsSecondaryActionEnabled"
         :options="secondaryActionEnabledButtons"
-        v-ga="$ga.commands.pixelPic.bind(this, 'toggleIsSecondaryActionEnabled')" />
+        v-ga="$ga.commands.solvePixelPic.bind(this, 'toggleIsSecondaryActionEnabled', this.id)" />
       </b-form-group>
 
       <h4 class="pixture-title container bg-light text-secondary text-left p-3 mt-3">
@@ -85,7 +85,7 @@
       <transition name="bounce">
         <b-alert class="mt-3" variant="success" show v-if="isCompleted && !editMode">
           You got it! Try the
-          <router-link :to="{name: 'boards', params: { id: nextId }}" v-ga="$ga.commands.pixelPic.bind(this, 'completedNext')" >
+          <router-link :to="{name: 'boards', params: { id: nextId }}" v-ga="$ga.commands.solvePixelPic.bind(this, 'completedNext', this.id)" >
             next one
           </router-link>
           .

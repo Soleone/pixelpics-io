@@ -65,13 +65,14 @@ export default {
       })
       if (isNowCompleted) {
         this.$store.commit('setIsCompleted')
-        this.$ga.event('PixelPic', 'completed')
+        this.$ga.event('SolvePixelPic', 'completed', null, this.id)
       }
     }
 
   },
   computed: {
     ...mapState([
+      'id',
       'editMode',
       'isCompleted',
       'isSecondaryActionEnabled',

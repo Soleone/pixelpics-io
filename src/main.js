@@ -31,8 +31,11 @@ Vue.use(VueAnalytics, {
     tutorial (eventName) {
       this.$ga.event('Tutorial', eventName)
     },
-    pixelPic (eventName) {
-      this.$ga.event('PixelPic', eventName)
+    solvePixelPic (eventName, id) {
+      this.$ga.event('SolvePixelPic', eventName, null, id)
+    },
+    createPixelPic (eventName) {
+      this.$ga.event('CreatePixelPic', eventName)
     },
     navigation (eventName) {
       this.$ga.event('Navigation', eventName)
