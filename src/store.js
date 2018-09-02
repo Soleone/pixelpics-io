@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { binaryStringToCells } from './cells'
+import { binaryStringToCells } from './pixel_pics'
 import BINARY_CELLS from './cell_data'
 import { EOS_MAIN_NET } from './constants'
 

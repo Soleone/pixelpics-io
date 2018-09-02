@@ -99,7 +99,7 @@
 import Cell from './Cell.vue'
 import HintSeries from './HintSeries.vue'
 import CopyButton from './CopyButton.vue'
-import { cellsToBinaryString, resizeCells } from '../cells'
+import { resizeCells, cellsToBinaryString} from '../pixel_pic'
 import { hintsForCells } from '../hint_generator'
 import { mapState, mapGetters, mapMutations } from 'vuex'
 
