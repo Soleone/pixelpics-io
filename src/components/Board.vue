@@ -10,6 +10,13 @@
         </b-col>
       </b-row>
 
+      <b-row>
+        <b-col>
+          <copy-button title="Hex number:" :value="cellsToHex" class="mt-3">
+          </copy-button>
+        </b-col>
+      </b-row>
+
       <b-form class="mt-3">
         <b-row>
           <b-col>
@@ -132,6 +139,9 @@ export default {
     ]),
     cellsToBinaryString () {
       return cellsToBinaryString(this.rows)
+    },
+    cellsToHex () {
+      return cellsToHex(this.rows)
     },
     rows () {
       return this.cells

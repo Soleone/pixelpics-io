@@ -39,6 +39,21 @@ function resizeCells (cells, targetRowSize, targetColumnSize) {
   return newCells
 }
 
+function cellsToHex (cells) {
+  const binaryString = cellsToBinaryString(cells)
+  const binaryNumber = binaryStringToBinaryNumber(binaryString)
+  return decimalToHex(binaryNumber)
+}
+
+// Input: 2-dimensional Array of cells
+// Output: e.g."3x3:101101101"
+function cellsToBinaryString (cells) {
+  const rowSize = cells.length
+  const columnSize = cells[0].length
+  const binaryRows = cellsToBinaryRows(cells).map(rows => rows.join('')).join('')
+  return `${rowSize}${DIMENSION_DELIMITER}${columnSize}${DATA_DELIMITER}${binaryRows}`
+}
+
 // Input: e.g."3x3:101101101"
 // Output: 2-dimensional Array of cells
 function binaryStringToCells (binaryString) {
@@ -56,18 +71,9 @@ function binaryStringToCells (binaryString) {
   })
 }
 
-// Input: 2-dimensional Array of cells
-// Output: e.g."3x3:101101101"
-function cellsToBinaryString (cells) {
-  const rowSize = cells.length
-  const columnSize = cells[0].length
-  const binaryRows = cellsToBinaryRows(cells).map(rows => rows.join('')).join('')
-  return `${rowSize}${DIMENSION_DELIMITER}${columnSize}${DATA_DELIMITER}${binaryRows}`
-}
-
 function binaryStringToBinaryNumber (binaryString) {
   const [dimensions, binaryData] = binaryString.split(':')
-  const [x, y] = dimensions.split('x')
+  const [x, y] = dimensions.split(DIMENSION_DELIMITER)
 
   const xBinary = (parseInt(x)).toString(2).padStart(5, '0')
   const yBinary = (parseInt(y)).toString(2).padStart(5, '0')
@@ -79,15 +85,16 @@ function binaryStringToBinaryNumber (binaryString) {
 function binaryNumberToBinaryString (binaryNumber) {
   const decimalBinaryNumber = binaryExponentialToBinary(new Decimal(binaryNumber).toBinary(130))
   const binaryNumberAsString = decimalBinaryNumber.padStart(128, 0)
-  const xSize = parseInt(binaryNumberAsString.slice(-5), 2)
-  const ySize = parseInt(binaryNumberAsString.slice(-10, -5), 2)
-  const pixelCount = (xSize * ySize) || 1
+  const x = parseInt(binaryNumberAsString.slice(-5), 2)
+  const y = parseInt(binaryNumberAsString.slice(-10, -5), 2)
+  const pixelCount = (x * y) || 1
   const binaryDataPadded = binaryNumberAsString.slice(0, -10)
   const binaryData = binaryDataPadded.slice(-pixelCount)
-  return `${xSize}x${ySize}:${binaryData}`
+  return `${x}${DIMENSION_DELIMITER}${y}${DATA_DELIMITER}${binaryData}`
 }
 
 function decimalToHex (decimal, pad = 32) {
+  // TODO: Fix toHex
   const [, hexdata] = new Decimal(decimal).toHex().split('x')
   const hexdataPadded = hexdata.padStart(pad, '0')
   const hexdataReversed = chunk(hexdataPadded, 2).reverse().join('')
@@ -123,27 +130,12 @@ function cellsToBinaryRows (cells) {
   })
 }
 
-function binaryExponentialToBinary (binaryExponential) {
-  binaryExponential = binaryExponential.slice(2)
-  let exponent = binaryExponential.match(/p\+\d+/)[0].slice(2)
-  let base = binaryExponential.slice(0, binaryExponential.indexOf('p'))
-
-  if (base.indexOf('.') > -1) {
-    const baseNoDecimal = base.replace('.', '')
-    const zeroCount = exponent - baseNoDecimal.length + 1
-    const zeros = zeroCount > 0 ? '0'.repeat(zeroCount) : ''
-    return `${baseNoDecimal}${zeros}`
-  } else {
-    const zeros = '0'.repeat(exponent)
-    return `${base}${zeros}`
-  }
-}
-
 export {
   createCells,
   resizeCells,
-  binaryStringToCells,
+  cellsToHex,
   cellsToBinaryString,
+  binaryStringToCells,
   binaryStringToBinaryNumber,
   binaryNumberToBinaryString,
   decimalToHex,

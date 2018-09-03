@@ -4,7 +4,9 @@ import {
   binaryStringToBinaryNumber,
   binaryNumberToBinaryString,
   decimalToHex,
-  hexToDecimal
+  hexToDecimal,
+  cellsToHex,
+  createCells
 } from '../../../src/pixel_pic'
 
 describe('binaryStringToBinaryNumber', () => {
@@ -128,5 +130,41 @@ describe('hexToDecimal', () => {
   it('returns a string of max int for all ff hex pairs', () => {
     const decimal = hexToDecimal('0xffffffffffffffff000000000000000000')
     expect(decimal.toString()).toBe('18446744073709551615')
+  })
+
+  it('returns a string of max int64 for all ff hex pairs', () => {
+    const decimal = hexToDecimal('0x5eaffffffffffffffffffffffff00000000')
+    expect(decimal.toString()).toBe('1298074214633706907132624082304330')
+  })
+})
+
+describe('cellsToHex', () => {
+  it('returns 33 as hex for 1x1:0', () => {
+    const cells = createCells(1, 1)
+    expect(cellsToHex(cells)).toBe('0x21000000000000000000000000000000')
+  })
+
+  it('returns 1057 as hex for 1x1:1', () => {
+    const cells = createCells(1, 1, () => {
+      return { filled: true }
+    })
+    expect(cellsToHex(cells)).toBe('0x21040000000000000000000000000000')
+  })
+
+  it('returns 1298074214633706907132624082304330 as hex for 10x10:1', () => {
+    const cells = createCells(10, 10, () => {
+      return { filled: true }
+    })
+    expect(cellsToHex(cells)).toBe('0x5peaffffffffffffffffffffffff00000000')
+  })
+
+  it('returns different hex for differently filled cells', () => {
+    const cells = createCells(10, 10, () => {
+      return { filled: true }
+    })
+    const differentCells = cells.slice()
+    differentCells[9][9].filled = false
+
+    expect(cellsToHex(cells)).not.toBe(cellsToHex(differentCells))
   })
 })
