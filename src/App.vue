@@ -96,8 +96,8 @@ export default {
         console.log('Got identity: ' + identity.name)
         console.log(identity)
         if (identity.accounts.length) {
-          const accountName = identity.accounts[0].name
-          this.$store.commit('setAccountName', accountName)
+          const account = identity.accounts.find(x => x.blockchain === 'eos')
+          this.$store.commit('setAccount', account)
         }
       }).catch((error) => {
         console.log('Error getting identity: ' + error)
@@ -109,6 +109,7 @@ export default {
     },
     setNetworkName (networkName) {
       this.networkName = networkName
+      this.$store.commit('setNetwork', this.network)
     }
   }
 }

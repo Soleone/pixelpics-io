@@ -3,15 +3,13 @@
 
     <!-- Edit controls -->
     <b-container v-if="editMode">
-      <b-row>
-        <b-col>
-          <copy-button title="Board Code:" :value="cellsToPixelMap" class="mt-3">
-          </copy-button>
-        </b-col>
-      </b-row>
-
       <b-form class="mt-3">
         <b-row>
+          <b-col cols="6" sm="4" md="3">
+            <b-button id="save-button" @click="upload" variant="primary" size="lg">
+              Save to EOS
+            </b-button>
+          </b-col>
           <b-col>
             <b-form-group description="Short description of your picture">
               <b-form-input v-model="title"
@@ -35,6 +33,13 @@
           </b-form-group>
         </b-row>
       </b-form>
+
+      <b-row>
+        <b-col>
+          <copy-button title="Board Code:" :value="cellsToPixelMap" class="mt-3">
+          </copy-button>
+        </b-col>
+      </b-row>
     </b-container>
 
     <!-- Board -->
@@ -115,7 +120,8 @@ export default {
         { text: 'Mark', value: true }
       ],
       rowSize: 6,
-      columnSize: 6
+      columnSize: 6,
+      title: null
     }
   },
   computed: {
@@ -123,7 +129,6 @@ export default {
       'id',
       'editMode',
       'cells',
-      'title',
       'isCompleted',
       'isSecondaryActionEnabled'
     ]),
@@ -174,6 +179,13 @@ export default {
     },
     resetBoard () {
       this.$store.state.cells = resizeCells(this.$store.state.cells, this.rowSize, this.columnSize)
+    },
+    upload () {
+      this.$store.dispatch('upload', { title: this.title, pixeldata: cellsToEosHex(this.cells) }).then((result) => {
+        console.log('Success')
+      }).catch((error) => {
+        console.log(`Error: ${error}`)
+      })
     }
   },
   watch: {
@@ -190,7 +202,7 @@ export default {
     this.columnSize = this.$store.state.cells[0].length
     this.$store.state.editMode = this.params.editMode || false
     this.$store.state.id = this.params.id
-    this.$store.state.title = this.params.title
+    this.title = this.params.title
     this.$store.state.isCompleted = false
   },
   components: {

@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 import { pixelMapToCells } from './pixel_pic'
 import BINARY_CELLS from './cell_data'
 import { EOS_MAIN_NET } from './constants'
+import Eos from 'eosjs'
 
 Vue.use(Vuex)
 
@@ -14,10 +15,10 @@ const store = new Vuex.Store({
     cells: [],
     editMode: true,
     id: null,
-    title: null,
     isCompleted: false,
     isSecondaryActionEnabled: false,
     scatter: null,
+    account: null,
     accountName: null,
     network: EOS_MAIN_NET
   },
@@ -38,11 +39,32 @@ const store = new Vuex.Store({
     setScatter (state, scatter) {
       state.scatter = scatter
     },
-    setAccountName (state, accountName) {
-      state.accountName = accountName
+    setAccount (state, account) {
+      state.account = account
+      state.accountName = account.name
+    },
+    setNetwork (state, network) {
+      state.network = network
     },
     setIsCompleted (state) {
       state.isCompleted = true
+    },
+    async upload (state, pixelpic) {
+      const eos = state.scatter.eos(state.network, Eos, {})
+      const eosOptions = { authorization: [state.accountName, state.account.authority].join('@') }
+      await eos.contract('eospixelpics', eosOptions).then((pixelpics) => {
+        console.log('Got ABI')
+        pixelpics.create({
+          owner: state.accountName,
+          title: pixelpic.title,
+          pixeldata: '0x00000000000000000000000000000000'
+        }, eosOptions)
+      })
+    }
+  },
+  actions: {
+    upload ({ commit }, data) {
+      commit('upload', data)
     }
   },
   getters: {
