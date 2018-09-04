@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Board from '../components/Board.vue'
 import Tutorial from '../views/Tutorial.vue'
-import { binaryStringToCells, createCells } from '../pixel_pic'
+import { pixelMapToCells, createCells } from '../pixel_pic'
 import BINARY_CELLS from '../cell_data'
 
 Vue.use(Router)
@@ -21,7 +21,7 @@ export default new Router({
       props (route) {
         const indexInt = parseInt(route.params.id) - 1
         const [title, binaryString] = Object.entries(BINARY_CELLS)[indexInt]
-        const cells = binaryStringToCells(binaryString)
+        const cells = pixelMapToCells(binaryString)
         return {
           params: {
             editMode: false,

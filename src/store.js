@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { binaryStringToCells } from './pixel_pics'
+import { pixelMapToCells } from './pixel_pic'
 import BINARY_CELLS from './cell_data'
 import { EOS_MAIN_NET } from './constants'
 
@@ -9,7 +9,7 @@ Vue.use(Vuex)
 const store = new Vuex.Store({
   state: {
     default: {
-      cells: binaryStringToCells(Object.values(BINARY_CELLS)[1])
+      cells: pixelMapToCells(Object.values(BINARY_CELLS)[1])
     },
     cells: [],
     editMode: true,

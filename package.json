@@ -15,9 +15,7 @@
     "deploy": "npm run build; push-dir --dir=dist --branch=gh-pages --cleanup"
   },
   "dependencies": {
-    "big.js": "^5.1.0",
     "bootstrap-vue": "^v2.0.0-rc.11",
-    "decimal.js": "^10.0.1",
     "scatter-js": "^2.4.0",
     "vue": "^2.5.2",
     "vue-analytics": "^5.14.0",

@@ -5,14 +5,7 @@
     <b-container v-if="editMode">
       <b-row>
         <b-col>
-          <copy-button title="Board Code:" :value="cellsToBinaryString" class="mt-3">
-          </copy-button>
-        </b-col>
-      </b-row>
-
-      <b-row>
-        <b-col>
-          <copy-button title="Hex number:" :value="cellsToHex" class="mt-3">
+          <copy-button title="Board Code:" :value="cellsToPixelMap" class="mt-3">
           </copy-button>
         </b-col>
       </b-row>
@@ -106,7 +99,7 @@
 import Cell from './Cell.vue'
 import HintSeries from './HintSeries.vue'
 import CopyButton from './CopyButton.vue'
-import { resizeCells, cellsToBinaryString} from '../pixel_pic'
+import { resizeCells, cellsToPixelMap, cellsToEosHex } from '../pixel_pic'
 import { hintsForCells } from '../hint_generator'
 import { mapState, mapGetters, mapMutations } from 'vuex'
 
@@ -137,11 +130,11 @@ export default {
     ...mapGetters([
       'nextId'
     ]),
-    cellsToBinaryString () {
-      return cellsToBinaryString(this.rows)
+    cellsToPixelMap () {
+      return cellsToPixelMap(this.rows)
     },
-    cellsToHex () {
-      return cellsToHex(this.rows)
+    cellsToEosHex () {
+      return cellsToEosHex(this.rows)
     },
     rows () {
       return this.cells
