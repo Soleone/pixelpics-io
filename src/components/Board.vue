@@ -138,9 +138,6 @@ export default {
     cellsToPixelMap () {
       return cellsToPixelMap(this.rows)
     },
-    cellsToEosHex () {
-      return cellsToEosHex(this.rows)
-    },
     rows () {
       return this.cells
     },
