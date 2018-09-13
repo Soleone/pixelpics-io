@@ -53,11 +53,10 @@ const store = new Vuex.Store({
       const eos = state.scatter.eos(state.network, Eos, {})
       const eosOptions = { authorization: [state.accountName, state.account.authority].join('@') }
       await eos.contract('eospixelpics', eosOptions).then((pixelpics) => {
-        console.log('Got ABI')
         pixelpics.create({
           owner: state.accountName,
           title: pixelpic.title,
-          pixeldata: '0x00000000000000000000000000000000'
+          pixeldata: pixelpic.pixeldata
         }, eosOptions)
       })
     }

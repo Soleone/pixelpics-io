@@ -104,7 +104,7 @@
 import Cell from './Cell.vue'
 import HintSeries from './HintSeries.vue'
 import CopyButton from './CopyButton.vue'
-import { resizeCells, cellsToPixelMap, cellsToEosHex } from '../pixel_pic'
+import { resizeCells, cellsToPixelMap, cellsToBigNumber } from '../pixel_pic'
 import { hintsForCells } from '../hint_generator'
 import { mapState, mapGetters, mapMutations } from 'vuex'
 
@@ -178,7 +178,7 @@ export default {
       this.$store.state.cells = resizeCells(this.$store.state.cells, this.rowSize, this.columnSize)
     },
     upload () {
-      this.$store.dispatch('upload', { title: this.title, pixeldata: cellsToEosHex(this.cells) }).then((result) => {
+      this.$store.dispatch('upload', { title: this.title, pixeldata: cellsToBigNumber(this.cells) }).then((result) => {
         console.log('Success')
       }).catch((error) => {
         console.log(`Error: ${error}`)

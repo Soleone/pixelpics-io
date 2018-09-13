@@ -9,6 +9,9 @@
   hex: The binary number converted to hex in EOS format with leading bits reversed
 */
 
+import {BigNumber} from 'bignumber.js'
+import fromExponential from 'from-exponential'
+
 const DIMENSION_DELIMITER = 'x'
 const DATA_DELIMITER = ':'
 
@@ -37,15 +40,15 @@ function resizeCells (cells, targetRowSize, targetColumnSize) {
   return newCells
 }
 
-function cellsToEosHex (cells) {
+function cellsToBigNumber (cells) {
   const pixelMap = cellsToPixelMap(cells)
   const binaryString = pixelMapToBinaryString(pixelMap)
   const hex = binaryStringToHex(binaryString)
-  return hexToEosHex(hex)
+  return hexToBigNumber(hex)
 }
 
-function eosHexToCells (eosHex) {
-  const hex = eosHexToHex(eosHex)
+function bigNumberToCells (bigNumber) {
+  const hex = bigNumberToHex(bigNumber)
   const binaryString = hexToBinaryString(hex)
   const pixelMap = binaryStringToPixelMap(binaryString)
   return pixelMapToCells(pixelMap)
@@ -112,14 +115,13 @@ function hexToBinaryString (hexString) {
   }).join('')
 }
 
-function hexToEosHex (hex) {
-  const reversedHex = chunk(hex, 2).reverse().join('')
-  return `0x${reversedHex}`
+function hexToBigNumber (hex) {
+  const hexNumber = BigNumber(`0x${hex}`).toString()
+  return fromExponential(hexNumber)
 }
 
-function eosHexToHex (eosHex) {
-  const hexReversed = eosHex.slice(2)
-  return chunk(hexReversed, 2).reverse().join('')
+function bigNumberToHex (bigNumber) {
+  return BigNumber(bigNumber).toString(2)
 }
 
 // private
@@ -148,14 +150,14 @@ function cellsToBinaryRows (cells) {
 export {
   createCells,
   resizeCells,
-  cellsToEosHex,
-  eosHexToCells,
+  cellsToBigNumber,
+  bigNumberToCells,
   cellsToPixelMap,
   pixelMapToCells,
   pixelMapToBinaryString,
   binaryStringToPixelMap,
   binaryStringToHex,
   hexToBinaryString,
-  hexToEosHex,
-  eosHexToHex
+  hexToBigNumber,
+  bigNumberToHex
 }
