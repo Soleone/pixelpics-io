@@ -41,7 +41,7 @@ const store = new Vuex.Store({
     },
     setAccount (state, account) {
       state.account = account
-      state.accountName = account.name
+      state.accountName = account && account.name
     },
     setNetwork (state, network) {
       state.network = network

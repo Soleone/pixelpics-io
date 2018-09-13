@@ -105,7 +105,7 @@ export default {
     },
     async scatterDisconnect () {
       await this.scatter.forgetIdentity()
-      this.$store.commit('setAccountName', null)
+      this.$store.commit('setAccount', null)
     },
     setNetworkName (networkName) {
       this.networkName = networkName
