@@ -39,9 +39,16 @@
     </b-navbar>
 
     <b-modal id="about-modal" title="Pixel Pics" :ok-only="true" ok-title="Thanks" ok-variant="secondary">
-      Built by <a href="https://soleone.github.io" target="_blank">Sole One</a>.
-      All code <a href="https://github.com/soleone/pixelpics-io" target="_blank">open source</a>.
-      Powered by <a href="https://eos.io" target="_blank">EOS</a>.
+      <ul class="list-unstyled">
+        <li>
+          <a href="https://github.com/soleone/pixelpics-io/issues" target="github">Submit feedback</a> if you see something.
+          All code <a href="https://github.com/soleone/pixelpics-io" target="github">open source</a>.
+        </li>
+        <li>
+          Built by <a href="https://soleone.github.io" target="_blank">Sole One</a>.
+          Powered by <a href="https://eos.io" target="_blank">EOS</a>.
+        </li>
+      </ul>
     </b-modal>
 
     <router-view :key="$route.fullPath" />
