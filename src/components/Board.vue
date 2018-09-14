@@ -18,9 +18,14 @@
           </b-col>
 
           <b-col cols="6" lg="3" order="2" order-lg="4">
-            <b-button id="save-button" @click="upload" variant="primary" size="lg">
-              Save to EOS
+            <b-button id="save-button" @click="upload" :disabled="!account" variant="primary" size="lg">
+              <span id="save-button-container">
+                Save to EOS
+              </span>
             </b-button>
+            <b-tooltip :disabled="!!account" target="save-button-container" placement="bottom">
+              Connect your EOS account with Scatter first.
+            </b-tooltip>
           </b-col>
 
           <b-col cols="6" lg="3" order="3" order-lg="2">
@@ -126,7 +131,9 @@ export default {
       'editMode',
       'cells',
       'isCompleted',
-      'isSecondaryActionEnabled'
+      'isSecondaryActionEnabled',
+      'status',
+      'account'
     ]),
     ...mapGetters([
       'nextId'
@@ -180,14 +187,19 @@ export default {
       this.$store.state.cells = resizeCells(this.$store.state.cells, this.rowSize, this.columnSize)
     },
     upload () {
+      if (!this.eosTitle) {
+        this.status.info = null
+        this.status.error = 'Enter a title'
+        return
+      }
       const pixelpic = {
-        title: this.eosTitle.toString().toLowerCase(),
+        title: this.eosTitle.toLowerCase(),
         pixeldata: cellsToBigNumber(this.cells)
       }
       this.$store.dispatch('upload', pixelpic).then((result) => {
-        console.log('Success')
       }).catch((error) => {
-        console.log(`Error: ${error}`)
+        this.status.info = null
+        this.status.error = `Error: ${error}`
       })
     }
   },

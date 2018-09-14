@@ -13,3 +13,5 @@ export const JUNGLE_NET = {
   host: 'jungle.eosio.cr',
   port: 443
 }
+
+export const ACCOUNT_NAME = 'eospixelpics'

@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import { pixelMapToCells } from './pixel_pic'
 import BINARY_CELLS from './cell_data'
-import { EOS_MAIN_NET } from './constants'
+import { EOS_MAIN_NET, ACCOUNT_NAME } from './constants'
 import Eos from 'eosjs'
 
 Vue.use(Vuex)
@@ -19,8 +19,11 @@ const store = new Vuex.Store({
     isSecondaryActionEnabled: false,
     scatter: null,
     account: null,
-    accountName: null,
-    network: EOS_MAIN_NET
+    network: EOS_MAIN_NET,
+    status: {
+      info: null,
+      error: null
+    }
   },
   mutations: {
     toggleCellSelected (state, cellPosition) {
@@ -41,7 +44,6 @@ const store = new Vuex.Store({
     },
     setAccount (state, account) {
       state.account = account
-      state.accountName = account && account.name
     },
     setNetwork (state, network) {
       state.network = network
@@ -50,14 +52,27 @@ const store = new Vuex.Store({
       state.isCompleted = true
     },
     async upload (state, pixelpic) {
+      state.status.info = null
+      state.status.error = null
       const eos = state.scatter.eos(state.network, Eos, {})
-      const eosOptions = { authorization: [state.accountName, state.account.authority].join('@') }
-      await eos.contract('eospixelpics', eosOptions).then((pixelpics) => {
+      const eosOptions = { authorization: [state.account.name, state.account.authority].join('@') }
+      state.status.info = 'Preparing smart contract interaction'
+      await eos.contract(ACCOUNT_NAME, eosOptions).then((pixelpics) => {
+        state.status.info = 'Received remote smart contract information'
         pixelpics.create({
-          owner: state.accountName,
+          owner: state.account.name,
           title: pixelpic.title,
           pixeldata: pixelpic.pixeldata
-        }, eosOptions)
+        }, eosOptions).then((trx) => {
+          state.status.info = `Successfully uploaded pixelpic. Transaction ID: ${trx.transaction_id}`
+        }).catch((error) => {
+          state.status.info = null
+          state.status.error = `Error: ${error.message || error}`
+        })
+        state.status.info = 'Sending to Scatter'
+      }).catch((error) => {
+        state.status.info = null
+        state.status.error = `Error: ${error.message || error}`
       })
     }
   },

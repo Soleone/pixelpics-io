@@ -24,15 +24,15 @@
           </b-nav-item>
 
           <transition name="bounce" leave-active-class="bounceUp">
-            <b-nav-item v-if="scatter && !accountName" href @click="scatterConnect">
+            <b-nav-item v-if="scatter && !account" href @click="scatterConnect">
               <icon name="plug"></icon>
               <span>Connect Scatter</span>
             </b-nav-item>
           </transition>
 
-          <b-nav-item v-if="accountName" href @click="scatterDisconnect">
+          <b-nav-item v-if="account" href @click="scatterDisconnect">
             <icon name="sign-out-alt"></icon>
-            <span>Disconnect {{ accountName }}</span>
+            <span>Disconnect {{ account.name }}</span>
           </b-nav-item>
         </b-navbar-nav>
       </b-collapse>
@@ -50,6 +50,14 @@
         </li>
       </ul>
     </b-modal>
+
+    <div v-if="status.info" class="bg-light p-3">
+      {{ status.info }}
+    </div>
+
+    <div v-if="status.error" class="bg-warning p-3">
+      {{ status.error }}
+    </div>
 
     <router-view :key="$route.fullPath" />
   </div>
@@ -76,8 +84,9 @@ export default {
   computed: {
     ...mapState([
       'scatter',
-      'accountName',
-      'id'
+      'account',
+      'id',
+      'status'
     ]),
     ...mapGetters([
       'nextId'
