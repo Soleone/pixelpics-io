@@ -2,44 +2,40 @@
   <section class="board-wrapper animated" :class="{'fadeLeft': isCompleted}">
 
     <!-- Edit controls -->
-    <b-container v-if="editMode">
-      <b-form class="mt-3">
+    <b-container v-if="editMode" class="mt-3">
+      <b-form>
         <b-row>
-          <b-col cols="6" sm="4" md="3">
-            <b-button id="save-button" @click="upload" variant="primary" size="lg">
-              Save to EOS
-            </b-button>
-          </b-col>
-          <b-col>
-            <b-form-group description="Short description of your picture">
-              <b-form-input v-model="title"
+          <b-col cols="6" lg="3" order="1" order-lg="1">
+            <b-form-group description="Name of your picture, up to 12 characters long">
+              <b-form-input v-model="eosTitle"
                             type="text"
                             maxlength="12"
                             size="lg"
-                            placeholder="My Title"
+                            placeholder="TITLE"
                             v-ga.keydown="$ga.commands.createPixelPic.bind(this, 'changeTitle')">
               </b-form-input>
             </b-form-group>
           </b-col>
-        </b-row>
 
-        <b-row>
-          <b-form-group :label="rowSizeTitle" class="col">
-            <b-form-input type="range" min="3" max="10" v-model="rowSize" v-ga="$ga.commands.createPixelPic.bind(this, 'changeRowSize')"></b-form-input>
-          </b-form-group>
+          <b-col cols="6" lg="3" order="2" order-lg="4">
+            <b-button id="save-button" @click="upload" variant="primary" size="lg">
+              Save to EOS
+            </b-button>
+          </b-col>
 
-          <b-form-group :label="columnSizeTitle" class="col">
-            <b-form-input type="range" min="3" max="10" v-model="columnSize" v-ga="$ga.commands.createPixelPic.bind(this, 'changeColumnSize')"></b-form-input>
-          </b-form-group>
+          <b-col cols="6" lg="3" order="3" order-lg="2">
+            <b-form-group :label="rowSizeTitle">
+              <b-form-input type="range" min="3" max="10" v-model="rowSize" v-ga="$ga.commands.createPixelPic.bind(this, 'changeRowSize')"></b-form-input>
+            </b-form-group>
+          </b-col>
+
+          <b-col cols="6" lg="3" order="4" order-lg="3">
+            <b-form-group :label="columnSizeTitle">
+              <b-form-input type="range" min="3" max="10" v-model="columnSize" v-ga="$ga.commands.createPixelPic.bind(this, 'changeColumnSize')"></b-form-input>
+            </b-form-group>
+          </b-col>
         </b-row>
       </b-form>
-
-      <b-row>
-        <b-col>
-          <copy-button title="Board Code:" :value="cellsToPixelMap" class="mt-3">
-          </copy-button>
-        </b-col>
-      </b-row>
     </b-container>
 
     <!-- Board -->
@@ -104,7 +100,7 @@
 import Cell from './Cell.vue'
 import HintSeries from './HintSeries.vue'
 import CopyButton from './CopyButton.vue'
-import { resizeCells, cellsToPixelMap, cellsToBigNumber } from '../pixel_pic'
+import { resizeCells, cellsToBigNumber } from '../pixel_pic'
 import { hintsForCells } from '../hint_generator'
 import { mapState, mapGetters, mapMutations } from 'vuex'
 
@@ -135,8 +131,14 @@ export default {
     ...mapGetters([
       'nextId'
     ]),
-    cellsToPixelMap () {
-      return cellsToPixelMap(this.rows)
+    eosTitle: {
+      get () {
+        return this.title
+      },
+      set (newTitle) {
+        newTitle = newTitle.toUpperCase().replace(/\s/, '.').replace(/[^A-Z.1-5]/, '')
+        this.title = newTitle
+      }
     },
     rows () {
       return this.cells
@@ -178,7 +180,11 @@ export default {
       this.$store.state.cells = resizeCells(this.$store.state.cells, this.rowSize, this.columnSize)
     },
     upload () {
-      this.$store.dispatch('upload', { title: this.title, pixeldata: cellsToBigNumber(this.cells) }).then((result) => {
+      const pixelpic = {
+        title: this.eosTitle.toString().toLowerCase(),
+        pixeldata: cellsToBigNumber(this.cells)
+      }
+      this.$store.dispatch('upload', pixelpic).then((result) => {
         console.log('Success')
       }).catch((error) => {
         console.log(`Error: ${error}`)
