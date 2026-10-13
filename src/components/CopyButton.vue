@@ -31,7 +31,6 @@ export default {
       input.blur()
       this.$root.$emit('bv::hide::tooltip')
       this.$refs.copiedFeedbackTooltip.$emit('open')
-      this.$ga.event('CopyButton', 'copyToClipboard')
       setTimeout(() => {
         this.$root.$emit('bv::hide::tooltip')
       }, 1000)

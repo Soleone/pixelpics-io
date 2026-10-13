@@ -5,41 +5,30 @@
     <b-container v-if="editMode" class="mt-3">
       <b-form>
         <b-row>
-          <b-col cols="6" lg="3" order="1" order-lg="1">
-            <b-form-group description="Name of your picture, up to 12 characters long">
-              <b-form-input v-model="eosTitle"
+          <b-col cols="12" lg="6" order="1" order-lg="1">
+            <b-form-group description="Name your picture, then draw it on the board">
+              <b-form-input v-model="title"
                             type="text"
-                            maxlength="12"
+                            maxlength="20"
                             size="lg"
-                            placeholder="TITLE"
-                            v-ga.keydown="$ga.commands.createPixelPic.bind(this, 'changeTitle')">
+                            placeholder="Title">
               </b-form-input>
             </b-form-group>
           </b-col>
 
-          <b-col cols="6" lg="3" order="2" order-lg="4">
-            <b-button id="save-button" @click="upload" :disabled="!account" variant="primary" size="lg">
-              <span id="save-button-container">
-                Save to EOS
-              </span>
-            </b-button>
-            <b-tooltip :disabled="!!account" target="save-button-container" placement="bottom">
-              Connect your EOS account with Scatter first.
-            </b-tooltip>
-          </b-col>
-
           <b-col cols="6" lg="3" order="3" order-lg="2">
             <b-form-group :label="rowSizeTitle">
-              <b-form-input type="range" min="3" max="10" v-model="rowSize" v-ga="$ga.commands.createPixelPic.bind(this, 'changeRowSize')"></b-form-input>
+              <b-form-input type="range" min="3" max="10" v-model="rowSize"></b-form-input>
             </b-form-group>
           </b-col>
 
           <b-col cols="6" lg="3" order="4" order-lg="3">
             <b-form-group :label="columnSizeTitle">
-              <b-form-input type="range" min="3" max="10" v-model="columnSize" v-ga="$ga.commands.createPixelPic.bind(this, 'changeColumnSize')"></b-form-input>
+              <b-form-input type="range" min="3" max="10" v-model="columnSize"></b-form-input>
             </b-form-group>
           </b-col>
         </b-row>
+        <copy-button title="Share" :value="shareUrl" class="mb-3" />
       </b-form>
     </b-container>
 
@@ -76,12 +65,12 @@
         v-bind:checked="isSecondaryActionEnabled"
         @change="toggleIsSecondaryActionEnabled"
         :options="secondaryActionEnabledButtons"
-        v-ga="$ga.commands.solvePixelPic.bind(this, 'toggleIsSecondaryActionEnabled', this.id)" />
+        />
       </b-form-group>
 
       <h4 class="pixture-title container bg-light text-secondary text-left p-3 mt-3">
         <div class="row">
-          <b-badge pill variant="secondary">
+          <b-badge v-if="id" pill variant="secondary">
             {{ formattedId }}
           </b-badge>
           <span class="ml-2 text-uppercase font-weight-light">{{ title }}</span>
@@ -91,7 +80,7 @@
       <transition name="bounce">
         <b-alert class="mt-3" variant="success" show v-if="isCompleted && !editMode">
           You got it! Try the
-          <router-link :to="{name: 'boards', params: { id: nextId }}" v-ga="$ga.commands.solvePixelPic.bind(this, 'completedNext', this.id)" >
+          <router-link :to="{name: 'boards', params: { id: nextId }}" >
             next one
           </router-link>
           .
@@ -105,7 +94,7 @@
 import Cell from './Cell.vue'
 import HintSeries from './HintSeries.vue'
 import CopyButton from './CopyButton.vue'
-import { resizeCells, cellsToBigNumber } from '../pixel_pic'
+import { resizeCells, cellsToPixelMap } from '../pixel_pic'
 import { hintsForCells } from '../hint_generator'
 import { mapState, mapGetters, mapMutations } from 'vuex'
 
@@ -131,21 +120,18 @@ export default {
       'editMode',
       'cells',
       'isCompleted',
-      'isSecondaryActionEnabled',
-      'status',
-      'account'
+      'isSecondaryActionEnabled'
     ]),
     ...mapGetters([
       'nextId'
     ]),
-    eosTitle: {
-      get () {
-        return this.title
-      },
-      set (newTitle) {
-        newTitle = newTitle.toUpperCase().replace(/\s/, '.').replace(/[^A-Z.1-5]/, '')
-        this.title = newTitle
-      }
+    shareUrl () {
+      const route = this.$router.resolve({
+        name: 'play',
+        params: { map: cellsToPixelMap(this.cells) },
+        query: this.title ? { title: this.title } : {}
+      })
+      return new URL(route.href, window.location.href).href
     },
     rows () {
       return this.cells
@@ -185,22 +171,6 @@ export default {
     },
     resetBoard () {
       this.$store.state.cells = resizeCells(this.$store.state.cells, this.rowSize, this.columnSize)
-    },
-    upload () {
-      if (!this.eosTitle) {
-        this.status.info = null
-        this.status.error = 'Enter a title'
-        return
-      }
-      const pixelpic = {
-        title: this.eosTitle.toLowerCase(),
-        pixeldata: cellsToBigNumber(this.cells)
-      }
-      this.$store.dispatch('upload', pixelpic).then((result) => {
-      }).catch((error) => {
-        this.status.info = null
-        this.status.error = `Error: ${error}`
-      })
     }
   },
   watch: {

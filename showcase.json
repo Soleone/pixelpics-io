@@ -1,0 +1,21 @@
+{
+  "$schema": "https://raw.githubusercontent.com/Soleone/showcase/main/schema/showcase.schema.json",
+  "title": "Pixel Pics",
+  "pitch": "Nonogram puzzles in your browser: use the number hints to uncover a hidden pixel picture, or draw your own and share it as a link.",
+  "description": "Twenty hand-drawn puzzles from 3x3 to 10x10 with a short tutorial, select and mark controls that work on phones, and an editor whose puzzles travel entirely in the URL, so sharing needs no server.",
+  "kind": "web-app",
+  "stage": "prototype",
+  "year": 2018,
+  "tech": ["Vue", "Vuex", "Vite", "Bootstrap"],
+  "repo": "https://github.com/Soleone/pixelpics",
+  "live": "https://pixelpics.soleone.xyz",
+  "media": {
+    "hero": "docs/media/hero.png",
+    "motion": "docs/media/gameplay.webp",
+    "capture": "npm run media:capture -- --url http://localhost:4173"
+  },
+  "demo": {
+    "strategy": "hosted",
+    "local": "npm run dev"
+  }
+}

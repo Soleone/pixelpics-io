@@ -33,6 +33,21 @@ export default new Router({
       }
     },
     {
+      path: '/play/:map',
+      name: 'play',
+      component: Board,
+      props (route) {
+        return {
+          params: {
+            editMode: false,
+            cells: pixelMapToCells(route.params.map),
+            id: null,
+            title: route.query.title || 'a shared picture'
+          }
+        }
+      }
+    },
+    {
       path: '/new',
       name: 'new',
       component: Board,

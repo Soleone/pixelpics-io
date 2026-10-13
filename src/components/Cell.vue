@@ -65,7 +65,6 @@ export default {
       })
       if (isNowCompleted) {
         this.$store.commit('setIsCompleted')
-        this.$ga.event('SolvePixelPic', 'completed', null, this.id)
       }
     }
 

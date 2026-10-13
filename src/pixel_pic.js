@@ -1,16 +1,11 @@
 /*
   These functions convert between the different representations of cells (pixels):
 
-  cells (Vue) <-> binaryString <-> binaryNumber <-> hex (EOS)
+  cells (Vue) <-> pixelMap
 
   cells: Array of objects with filled attributes set to true where a pixel should be
   pixelMap: Shareable format for pixelpics, e.g. this represents a small square: 3x3:111101111
-  binaryString: A specially crafted 128 bit binary number that represents the pixelpic data and dimension definitions
-  hex: The binary number converted to hex in EOS format with leading bits reversed
 */
-
-import {BigNumber} from 'bignumber.js'
-import fromExponential from 'from-exponential'
 
 const DIMENSION_DELIMITER = 'x'
 const DATA_DELIMITER = ':'
@@ -40,27 +35,13 @@ function resizeCells (cells, targetRowSize, targetColumnSize) {
   return newCells
 }
 
-function cellsToBigNumber (cells) {
-  const pixelMap = cellsToPixelMap(cells)
-  const binaryString = pixelMapToBinaryString(pixelMap)
-  const hex = binaryStringToHex(binaryString)
-  return hexToBigNumber(hex)
-}
-
-function bigNumberToCells (bigNumber) {
-  const hex = bigNumberToHex(bigNumber)
-  const binaryString = hexToBinaryString(hex)
-  const pixelMap = binaryStringToPixelMap(binaryString)
-  return pixelMapToCells(pixelMap)
-}
-
 // Input: 2-dimensional Array of cells
-// Output: e.g."3x3:101101101"
+// Output: e.g."3x3:101101101" (columns x rows)
 function cellsToPixelMap (cells) {
   const rowSize = cells.length
   const columnSize = cells[0].length
   const binaryRows = cellsToBinaryRows(cells).map(rows => rows.join('')).join('')
-  return `${rowSize}${DIMENSION_DELIMITER}${columnSize}${DATA_DELIMITER}${binaryRows}`
+  return `${columnSize}${DIMENSION_DELIMITER}${rowSize}${DATA_DELIMITER}${binaryRows}`
 }
 
 // Input: e.g."3x3:101101101"
@@ -80,57 +61,7 @@ function pixelMapToCells (binaryString) {
   })
 }
 
-function pixelMapToBinaryString (binaryString) {
-  const [dimensions, binaryData] = binaryString.split(':')
-  const [x, y] = dimensions.split(DIMENSION_DELIMITER)
-
-  const xBinary = (parseInt(x)).toString(2).padStart(5, '0')
-  const yBinary = (parseInt(y)).toString(2).padStart(5, '0')
-
-  return `${binaryData}${yBinary}${xBinary}`.padStart(128, '0')
-}
-
-function binaryStringToPixelMap (binaryString) {
-  const binaryStringPadded = binaryString.padStart(128, 0)
-  const x = parseInt(binaryStringPadded.slice(-5), 2)
-  const y = parseInt(binaryStringPadded.slice(-10, -5), 2)
-  const pixelCount = (x * y) || 1
-  const binaryDataPadded = binaryStringPadded.slice(0, -10)
-  const binaryData = binaryDataPadded.slice(-pixelCount)
-  return `${x}${DIMENSION_DELIMITER}${y}${DATA_DELIMITER}${binaryData}`
-}
-
-function binaryStringToHex (binaryString) {
-  const binaryStringPadded = binaryString.padStart(128, '0')
-  const bytes = chunk(binaryStringPadded, 8)
-  return bytes.map((byte) => {
-    return parseInt(byte, 2).toString(16).padStart(2, '0')
-  }).join('')
-}
-
-function hexToBinaryString (hexString) {
-  const bytes = chunk(hexString, 2)
-  return bytes.map((byte) => {
-    return parseInt(byte, 16).toString(2).padStart(8, '0')
-  }).join('')
-}
-
-function hexToBigNumber (hex) {
-  const hexNumber = BigNumber(`0x${hex}`).toString()
-  return fromExponential(hexNumber)
-}
-
-function bigNumberToHex (bigNumber) {
-  return BigNumber(bigNumber).toString(2)
-}
-
 // private
-
-function chunk (array, chunkSize, cache = []) {
-  const tmp = [...array]
-  while (tmp.length) cache.push(tmp.splice(0, chunkSize).join(''))
-  return cache
-}
 
 function newCell (props = {}) {
   return {
@@ -150,14 +81,6 @@ function cellsToBinaryRows (cells) {
 export {
   createCells,
   resizeCells,
-  cellsToBigNumber,
-  bigNumberToCells,
   cellsToPixelMap,
-  pixelMapToCells,
-  pixelMapToBinaryString,
-  binaryStringToPixelMap,
-  binaryStringToHex,
-  hexToBinaryString,
-  hexToBigNumber,
-  bigNumberToHex
+  pixelMapToCells
 }
